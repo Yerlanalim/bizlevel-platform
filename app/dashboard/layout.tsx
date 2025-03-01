@@ -1,5 +1,4 @@
 'use client'
-import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { supabase } from '@/utils/supabaseClient'
@@ -10,13 +9,6 @@ type MenuItem = {
   title: string;
   icon: string;
   href: string;
-}
-
-// Определяем тип для пользователя
-type User = {
-  email?: string;
-  id?: string;
-  [key: string]: any;
 }
 
 export default function DashboardLayout({

@@ -2,13 +2,7 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/utils/supabaseClient'
-
-// Определяем тип для пользователя
-type User = {
-  email?: string;
-  id?: string;
-  [key: string]: any;
-}
+import { User } from '@supabase/supabase-js'
 
 export default function Dashboard() {
   const [user, setUser] = useState<User | null>(null)
@@ -17,7 +11,7 @@ export default function Dashboard() {
   useEffect(() => {
     const getUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
-      setUser(user as User)
+      setUser(user)
       setLoading(false)
     }
     getUser()
@@ -33,7 +27,7 @@ export default function Dashboard() {
       
       <div className="w-full max-w-4xl">
         <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-          <h2 className="text-xl font-semibold mb-2">Добро пожаловать, {user?.email || 'Пользователь'}!</h2>
+          <h2 className="text-xl font-semibold mb-2">Добро пожаловать, {user?.user_metadata.email || 'Пользователь'}!</h2>
           <p className="text-gray-600">Выберите раздел для работы:</p>
         </div>
         
