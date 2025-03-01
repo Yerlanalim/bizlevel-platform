@@ -1,6 +1,5 @@
 'use client'
 import { useState } from 'react'
-import { supabase } from '@/utils/supabaseClient'
 
 type Settings = {
   notifications: boolean;
@@ -8,6 +7,8 @@ type Settings = {
   language: 'ru' | 'en';
   theme: 'light' | 'dark';
 }
+
+type SettingValue = boolean | 'ru' | 'en' | 'light' | 'dark';
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState<Settings>({
@@ -19,7 +20,7 @@ export default function SettingsPage() {
   const [isSaving, setIsSaving] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
-  const handleSettingChange = (key: keyof Settings, value: any) => {
+  const handleSettingChange = (key: keyof Settings, value: SettingValue) => {
     setSettings(prev => ({
       ...prev,
       [key]: value
@@ -35,7 +36,7 @@ export default function SettingsPage() {
       // TODO: Здесь будет сохранение настроек в базу данных
       await new Promise(resolve => setTimeout(resolve, 1000)) // Имитация запроса
       setMessage({ type: 'success', text: 'Настройки успешно сохранены' })
-    } catch (error) {
+    } catch {
       setMessage({ type: 'error', text: 'Произошла ошибка при сохранении настроек' })
     } finally {
       setIsSaving(false)
@@ -79,7 +80,7 @@ export default function SettingsPage() {
             <h3 className="text-lg font-medium mb-4">Язык</h3>
             <select
               value={settings.language}
-              onChange={(e) => handleSettingChange('language', e.target.value)}
+              onChange={(e) => handleSettingChange('language', e.target.value as 'ru' | 'en')}
               className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
             >
               <option value="ru">Русский</option>
@@ -96,7 +97,7 @@ export default function SettingsPage() {
                   type="radio"
                   value="light"
                   checked={settings.theme === 'light'}
-                  onChange={(e) => handleSettingChange('theme', e.target.value)}
+                  onChange={(e) => handleSettingChange('theme', e.target.value as 'light' | 'dark')}
                   className="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300"
                 />
                 <span className="ml-2">Светлая</span>
@@ -107,7 +108,7 @@ export default function SettingsPage() {
                   type="radio"
                   value="dark"
                   checked={settings.theme === 'dark'}
-                  onChange={(e) => handleSettingChange('theme', e.target.value)}
+                  onChange={(e) => handleSettingChange('theme', e.target.value as 'light' | 'dark')}
                   className="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300"
                 />
                 <span className="ml-2">Темная</span>
