@@ -2,6 +2,13 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { supabase } from '@/utils/supabaseClient'
+import { useEffect, useState } from 'react'
+
+// Определяем тип для пользователя
+type User = {
+  id: string;
+  role?: string;
+}
 
 // Определяем тип для пункта меню
 type MenuItem = {
@@ -9,6 +16,7 @@ type MenuItem = {
   title: string;
   icon: string;
   href: string;
+  adminOnly?: boolean;
 }
 
 export default function DashboardLayout({
@@ -17,6 +25,28 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   const pathname = usePathname()
+  const [user, setUser] = useState<User | null>(null)
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        // Получаем роль пользователя из профиля
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .single()
+        
+        setUser({
+          id: user.id,
+          role: profile?.role || 'user'
+        })
+      }
+    }
+    
+    getUser()
+  }, [])
 
   // Боковое меню
   const menuItems: MenuItem[] = [
@@ -25,6 +55,7 @@ export default function DashboardLayout({
       title: 'Дашборд', 
       icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6', 
       href: '/dashboard',
+      adminOnly: true
     },
     { 
       id: 'map', 
@@ -37,6 +68,7 @@ export default function DashboardLayout({
       title: 'Все уроки', 
       icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253', 
       href: '/dashboard/lessons',
+      adminOnly: true
     },
     { 
       id: 'profile', 
@@ -64,6 +96,14 @@ export default function DashboardLayout({
     },
   ]
 
+  // Фильтруем пункты меню в зависимости от роли пользователя
+  const filteredMenuItems = menuItems.filter(item => {
+    if (item.adminOnly) {
+      return user?.role === 'admin'
+    }
+    return true
+  })
+
   // Проверяем, активен ли пункт меню
   const isActive = (href: string) => {
     if (href === '/dashboard') {
@@ -81,7 +121,7 @@ export default function DashboardLayout({
         </div>
         <nav className="mt-6">
           <ul>
-            {menuItems.map(item => (
+            {filteredMenuItems.map(item => (
               <li key={item.id}>
                 <Link 
                   href={item.href}
