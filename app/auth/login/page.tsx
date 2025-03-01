@@ -3,6 +3,11 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { supabase } from '@/utils/supabaseClient'
 
+// Определяем тип для ошибки
+type AuthError = {
+  message: string;
+}
+
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -30,8 +35,9 @@ export default function Login() {
       }
 
       window.location.href = '/dashboard'
-    } catch (err: any) {
-      setError(err.message || 'Произошла ошибка при входе')
+    } catch (err: unknown) {
+      const error = err as AuthError
+      setError(error.message || 'Произошла ошибка при входе')
     } finally {
       setLoading(false)
     }
