@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { supabase } from '@/utils/supabaseClient'
+import Image from 'next/image'
 
 // Определяем тип для урока
 type Lesson = {
@@ -141,11 +141,12 @@ export default function LevelMap() {
                     <div className={`bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow ${lesson.completed ? 'border-l-4 border-blue-500' : ''}`}>
                       <div className="flex">
                         {lesson.image_url && (
-                          <div className="w-1/3 h-40">
-                            <img 
+                          <div className="w-1/3 h-40 relative">
+                            <Image 
                               src={lesson.image_url} 
                               alt={lesson.title} 
-                              className="w-full h-full object-cover"
+                              fill
+                              className="object-cover"
                             />
                           </div>
                         )}

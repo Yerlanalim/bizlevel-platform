@@ -1,8 +1,8 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useParams } from 'next/navigation'
-import { supabase } from '@/utils/supabaseClient'
 
 // Определяем типы
 type Lesson = {
@@ -177,11 +177,12 @@ export default function LessonDetail() {
       {/* Заголовок и информация об уроке */}
       <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
         {lesson.image_url && (
-          <div className="h-64 overflow-hidden">
-            <img 
+          <div className="h-64 overflow-hidden relative">
+            <Image 
               src={lesson.image_url} 
               alt={lesson.title} 
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
             />
           </div>
         )}

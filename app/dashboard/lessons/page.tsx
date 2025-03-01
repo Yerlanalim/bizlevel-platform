@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { supabase } from '@/utils/supabaseClient'
+import Image from 'next/image'
 
 // Определяем тип для урока
 type Lesson = {
@@ -123,11 +123,12 @@ export default function Lessons() {
           <Link key={lesson.id} href={`/dashboard/lessons/${lesson.id}`}>
             <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
               {lesson.image_url && (
-                <div className="h-40 overflow-hidden">
-                  <img 
+                <div className="h-40 overflow-hidden relative">
+                  <Image 
                     src={lesson.image_url} 
                     alt={lesson.title} 
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                   />
                 </div>
               )}

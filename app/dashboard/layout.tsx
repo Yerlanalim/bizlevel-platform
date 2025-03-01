@@ -12,14 +12,19 @@ type MenuItem = {
   href: string;
 }
 
+// Определяем тип для пользователя
+type User = {
+  email?: string;
+  id?: string;
+  [key: string]: any;
+}
+
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   const pathname = usePathname()
-  const [loading, setLoading] = useState(true)
-  const [user, setUser] = useState<any>(null)
 
   // Боковое меню
   const menuItems: MenuItem[] = [
@@ -66,15 +71,6 @@ export default function DashboardLayout({
       href: '/dashboard/settings',
     },
   ]
-
-  useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      setUser(user)
-      setLoading(false)
-    }
-    getUser()
-  }, [])
 
   // Проверяем, активен ли пункт меню
   const isActive = (href: string) => {
