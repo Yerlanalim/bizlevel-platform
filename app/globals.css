@@ -8,12 +8,18 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
   }
 }
 
@@ -21,4 +27,18 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Стили для переключателей */
+.toggle-checkbox:checked {
+  right: 0;
+  border-color: #14b8a6;
+}
+
+.toggle-checkbox:checked + .toggle-label {
+  background-color: #14b8a6;
+}
+
+.toggle-label {
+  transition: background-color 0.2s ease;
 }
