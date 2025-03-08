@@ -2,8 +2,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/utils/supabaseClient'
 import { User } from '@supabase/supabase-js'
-import { Star, Medal, Trophy, ChevronRight, Edit, Phone, Mail, Globe, Info } from 'lucide-react'
-import Link from 'next/link'
+import { Edit, Phone, Mail, Globe, Info } from 'lucide-react'
 import Image from 'next/image'
 
 // Тип для навыка
@@ -47,7 +46,6 @@ type Profile = {
 }
 
 export default function Profile() {
-  const [user, setUser] = useState<User | null>(null)
   const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
   const [activeTooltip, setActiveTooltip] = useState<{skillIndex: number, levelIndex: number} | null>(null)
@@ -57,8 +55,6 @@ export default function Profile() {
       const { data: { user } } = await supabase.auth.getUser()
       
       if (user) {
-        setUser(user)
-        
         // Получаем данные профиля из таблицы profiles
         const { data: profileData } = await supabase
           .from('profiles')
