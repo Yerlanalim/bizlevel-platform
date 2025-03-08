@@ -1,7 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { supabase } from '@/utils/supabaseClient'
-import { User } from '@supabase/supabase-js'
 import { Edit, Phone, Mail, Globe, Info } from 'lucide-react'
 import Image from 'next/image'
 
