@@ -44,6 +44,7 @@ type Profile = {
   };
 }
 
+// Явный экспорт компонента профиля
 export default function Profile() {
   const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)

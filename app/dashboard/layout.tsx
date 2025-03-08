@@ -30,6 +30,7 @@ type MenuItem = {
   adminOnly?: boolean;
 }
 
+// Основной layout для dashboard
 export default function DashboardLayout({
   children,
 }: {
